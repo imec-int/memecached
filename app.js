@@ -12,6 +12,7 @@ var config = require('./config');
 
 var dropbox = new Dropbox({app_key:config.dropbox.app_key, app_secret: config.dropbox.app_secret});
 var serverAddress = 'http://localhost:3000';
+var passportInitialized = false;
 
 var settings = {
 	dropboxuser: {
@@ -56,34 +57,41 @@ var webserver = http.createServer(app).listen(app.get('port'), function(){
 
 // Passport (Dropbox):
 
-passport.serializeUser(function (user, done) {
-	done(null, user);
-});
+function initPassport () {
+	if(passportInitialized) return;
 
-passport.deserializeUser(function (user, done) {
-	done(null, user);
-});
 
-passport.use(new DropboxStrategy({
-		consumerKey: config.dropbox.app_key,
-		consumerSecret: config.dropbox.app_secret,
-		callbackURL: serverAddress + "/auth/dropbox/callback"
-	},
-	function (token, tokenSecret, profile, done) {
-		var user = {
-			token       : token,
-			secret      : tokenSecret,
-			id          : profile.id,
-			username    : profile.username,
-			displayName : profile.displayName
-		};
+	passport.serializeUser(function (user, done) {
+		done(null, user);
+	});
 
-		settings.dropboxuser = user;
-		console.log(settings.dropboxuser);
+	passport.deserializeUser(function (user, done) {
+		done(null, user);
+	});
 
-		return done(null, user);
-	}
-));
+	passport.use(new DropboxStrategy({
+			consumerKey: config.dropbox.app_key,
+			consumerSecret: config.dropbox.app_secret,
+			callbackURL: serverAddress + "/auth/dropbox/callback"
+		},
+		function (token, tokenSecret, profile, done) {
+			var user = {
+				token       : token,
+				secret      : tokenSecret,
+				id          : profile.id,
+				username    : profile.username,
+				displayName : profile.displayName
+			};
+
+			settings.dropboxuser = user;
+			console.log(settings.dropboxuser);
+
+			return done(null, user);
+		}
+	));
+
+	passportInitialized = true;
+}
 
 
 app.get('/auth/dropbox', passport.authenticate('dropbox'));
@@ -96,12 +104,14 @@ app.get('/auth/dropbox/callback', passport.authenticate('dropbox', { failureRedi
 
 app.get('/', function (req, res){
 	serverAddress = req.protocol + "://" + req.get('host');
+	initPassport();
 
 	res.sendfile(__dirname + '/index.html');
 });
 
 app.get('/admin', function (req, res){
 	serverAddress = req.protocol + "://" + req.get('host');
+	initPassport();
 
 	var selectedfolder = getSelectedFolder();
 

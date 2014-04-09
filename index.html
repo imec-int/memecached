@@ -25,48 +25,8 @@ currentMeme = "";
 width = 240;
 height = 240;
 
-availableMemes = {
-    "bear-grylls.jpg": "Bear Grylls",
-    "brace-yourselves-x-is-coming.jpg": "Brace yourselves, X is coming",
-    "courage-wolf.jpg": "Courage Wolf",
-    "downvoting-roman.jpg": "Downvoting Roman",
-    "forever-alone.jpg": "Forever Alone",
-    "foul-bachelor-frog.jpg": "Foul Bachelor Frog",
-    "insanity-wolf.jpg": "Insanity Wolf",
-    "high-expectations-asian-father.jpg": "High Expectations Asian Father",
-    "lame-pun-coon.jpg": "Lame Pun Racoon",
-    "pedobear.jpg": "Pedo Bear",
-    "philosoraptor.jpg": "Philosoraptor",
-    "success-kid.jpg": "Success Kid",
-    "x-all-the-y.jpg": "X all the Y!",
-    "the-most-interesting-man-in-the-world.jpg": "The Most Interesting Man in the World",
-    "y-u-no.jpeg": "Y U NO Guy",
-    "advice-god.jpg": "Advice God",
-    "annoying-facebook-girl.jpg": "Annoying Facebook Girl",
-    "business-cat.jpg": "Business Cat",
-    "butthurt-dweller.jpg": "Butthurt Dweller",
-    "depression-dog.jpg": "Depression Dog",
-    "downvoting-roman.jpg": "Downvoting Roman",
-    "dwight-schrute.jpg": "Dwight Schrute",
-    "first-world-problems.jpg": "First World Problems",
-    "futurama-fry.jpg": "Futurama Fry",
-    "good-guy-greg.jpg": "Good Guy Greg",
-    "net-noob.jpg": "Net n00b",
-    "ordinary-muslim-man.jpg": "Ordinary Muslim Man",
-    "pickup-line-panda.jpg": "Pick-up Line Panda",
-    "redditors-wife.jpg": "Redditor's wife",
-    "scumbag-girl.jpg": "Scumbag Girl",
-    "scumbag-steve.jpg": "Scumbag Steve",
-    "sheltering-suburban-mom.jpg": "Sheltering Sub-urban Mom",
-    "socially-awesome-penguin.jpg": "Socially Awesome Penguine",
-    "socially-awkward-penguin.jpg": "Socially Awkward Penguine",
-    "successful-black-man.jpg": "Successful Black Man",
-    "the-most-interesting-cat-in-the-world.jpg": "The Most Interesting cat in the World"
-};
+availableMemes = {};
 
-getTemplateLink = function(filename) {
-    return  "http://dl.dropbox.com/u/40496552/memes/" + filename;
-}
 
 $(document).ready(function(){
 
@@ -90,11 +50,15 @@ $(document).ready(function(){
         }
     }
 
-    populateMemePicker = function() {
+    now.populateMemePicker = function(memes) {
+        console.log('populateMemePicker');
+
+        availableMemes = memes;
+
         $("#meme-picker").empty();
 
         for(name in availableMemes) {
-            var code = "<li> <a rel = 'twipsy' data-original-title = '" + availableMemes[name] + "' onclick = pickMeme('" + name + "')> <img class = 'thumbnail' width = '30' height = '30' src = '" + getTemplateLink(name) + "'></img></a> </li>";
+            var code = "<li> <a rel = 'twipsy' data-original-title = '" + availableMemes[name] + "' onclick = pickMeme('" + name + "')> <img class = 'thumbnail' width = '30' height = '30' src = '" + name + "'></img></a> </li>";
             $("#meme-picker").append(code);
         }
 
@@ -146,7 +110,7 @@ $(document).ready(function(){
         context.lineWidth = 6;
 
         var img = new Image();
-        img.src = getTemplateLink(doc.name);
+        img.src = doc.name;
         img.onload = function() {
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
             drawText(context, "top", doc.text.line1);
@@ -162,6 +126,8 @@ $(document).ready(function(){
         if(!currentMeme || currentMeme == doc.name)
             updateList(doc, "top");
     }
+
+
 
     $("#showall-button").click(function() {
         pickMeme();
@@ -185,8 +151,9 @@ $(document).ready(function(){
     $("#edit-info").hide();
     $("#editor").hide();
 
-    populateMemePicker();
+
     now.ready(function() {
+        now.init();
 	    pickMeme();
     });
 });

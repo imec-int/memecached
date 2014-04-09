@@ -1,6 +1,9 @@
 Memecached
 ==========
 
+## Real Dropbox folder
+Go to ```/admin``` to select a real Dropbox folder
+
 Love **memes**? 
 
 Want to generate memes and share them with everyone in **real-time**? 

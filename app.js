@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var fs  =require('fs');
 var mongo = require('mongodb');
 var express = require('express');

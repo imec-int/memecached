@@ -69,11 +69,11 @@ getTemplateLink = function(filename) {
 }
 
 $(document).ready(function(){
-    
+
     clearMemes = function() {
         $("#meme-list").empty();
     }
-    
+
     pickMeme = function(name) {
         clearMemes();
         currentMeme = name;
@@ -105,12 +105,12 @@ $(document).ready(function(){
 
     makeCanvas = function(doc) {
         return ("<canvas class = 'well' rel = 'twipsy' data-original-title = '" + availableMemes[doc.name] + "' onclick = pickMeme('" + doc.name + "') width = '" + width + "' height = '" + height + "' style='padding: 10px;' id='" + doc._id + "'></canvas>");
-        
+
         $(function() {
             $("canvas[rel=twipsy]").twipsy( { live: true } );
         });
     }
-    
+
     drawText = function(context, pos, text) {
         var fontSize = 100;
         while(1) {
@@ -120,16 +120,16 @@ $(document).ready(function(){
             }
             fontSize-=2;
         }
-       
+
         var y;
         if(pos == "top")
             y = fontSize + 15;
         else if(pos == "bottom") {
             y = height - 15;
         }
-         
+
         context.strokeText(text, width/2, y);
-        context.fillText(text, width/2, y); 
+        context.fillText(text, width/2, y);
     }
 
     updateList = function(doc, where) {
@@ -157,12 +157,12 @@ $(document).ready(function(){
     now.getContent = function(docs) {
         docs.forEach(updateList);
     }
-  
+
     now.receiveMeme = function(doc) {
         if(!currentMeme || currentMeme == doc.name)
             updateList(doc, "top");
     }
-    
+
     $("#showall-button").click(function() {
         pickMeme();
     });
@@ -181,7 +181,7 @@ $(document).ready(function(){
         $("#text-input1").val("");
         $("#text-input2").val("");
     });
-    
+
     $("#edit-info").hide();
     $("#editor").hide();
 
@@ -196,8 +196,8 @@ $(document).ready(function(){
 
 <body style = "background-color: #FFFAFF;">
 
-<h1 style = "margin-left: 20px;"> 
-    <a href = "/" class = "alert-message error"> memecached 
+<h1 style = "margin-left: 20px;">
+    <a href = "/" class = "alert-message error"> memecached
         <small>because memes must be realtime.</small>
     </a>
 </h1>

@@ -6,8 +6,9 @@ var path = require('path');
 var passport = require('passport');
 var DropboxStrategy = require('passport-dropbox').Strategy;
 var Dropbox = require('./dropbox');
+var config = require('./config');
 
-var dropbox = new Dropbox({app_key:config.app_key, app_secret: config.app_secret});
+var dropbox = new Dropbox({app_key:config.dropbox.app_key, app_secret: config.dropbox.app_secret});
 var serverAddress = 'http://localhost:3000';
 
 var settings = {
@@ -62,8 +63,8 @@ passport.deserializeUser(function (user, done) {
 });
 
 passport.use(new DropboxStrategy({
-		consumerKey: config.app_key,
-		consumerSecret: config.app_secret,
+		consumerKey: config.dropbox.app_key,
+		consumerSecret: config.dropbox.app_secret,
 		callbackURL: serverAddress + "/auth/dropbox/callback"
 	},
 	function (token, tokenSecret, profile, done) {

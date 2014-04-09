@@ -48,7 +48,7 @@ var everyone = require("now").initialize(webserver, {socketio: {'transports': ['
 
 // publish meme
 everyone.now.publish = function(meme) {
-    if(meme.name && meme.text.line1 && meme.text.line2) {
+    if(meme.name && (meme.text.line1 || meme.text.line2) ) {
         db.collection('memes', function(err, collection) {
             // add a date field and save
             meme.date = Date.now();

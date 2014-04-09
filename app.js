@@ -1,6 +1,38 @@
 var fs  =require('fs');
-var http = require('http');
 var mongo = require('mongodb');
+var express = require('express');
+var http = require('http')
+var path = require('path');
+
+var app = express();
+
+app.configure(function(){
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.cookieParser('wemecached1234567wemecached9987654321'));
+    app.use(express.session());
+    app.use(app.router);
+    app.use(require('stylus').middleware(__dirname + '/public'));
+    app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('development', function(){
+    app.use(express.errorHandler());
+});
+
+var webserver = http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+});
+
+app.get('/', function (req, res){
+    res.sendfile(__dirname + '/index.html');
+});
+
 
 var db = new mongo.Db('memedb', new mongo.Server("127.0.0.1", 27017));
 db.open(function(err) {
@@ -11,17 +43,8 @@ db.open(function(err) {
     }
 });
 
-server = http.createServer( function(req, res) {
-    fs.readFile('index.html', function(err, page) {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(page);
-        res.end();
-    });
-});
-server.listen(8080);
-
 // now.js code
-var everyone = require("now").initialize(server, {socketio: {'transports': ['xhr-polling']}});
+var everyone = require("now").initialize(webserver, {socketio: {'transports': ['xhr-polling']}});
 
 // publish meme
 everyone.now.publish = function(meme) {

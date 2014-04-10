@@ -1,5 +1,7 @@
 var OAuth = require('oauth').OAuth;
 var async = require('async');
+var fs = require('fs');
+var path = require('path');
 
 var dropboxOAuth
 
@@ -64,6 +66,20 @@ Dropbox.prototype.getDirectLink = function (dropboxuser, dropboxPath, callback){
 	});
 }
 
+Dropbox.prototype.downwloadFile = function (dropboxuser, dropboxPath, localFolder, callback) {
+	dropboxOAuth.get({url: 'https://api-content.dropbox.com/1/files/dropbox' + dropboxPath, binary: true}, dropboxuser.token, dropboxuser.secret, function (err, data, res){
+		if(err) return callback(err);
+
+		var filename = path.join(localFolder, path.basename(dropboxPath));
+
+		fs.writeFile(filename, data, function (err) {
+			if(err) return callback(err);
+
+			callback(null, filename);
+		});
+	});
+}
+
 Dropbox.prototype.getAbsoluteImages = function  (dropboxuser, dropboxPath, callback) {
 	var self = this;
 
@@ -82,6 +98,28 @@ Dropbox.prototype.getAbsoluteImages = function  (dropboxuser, dropboxPath, callb
 			});
 		}, function (err) {
 			callback(err, absoluteImages);
+		});
+	});
+}
+
+Dropbox.prototype.downloadImages = function  (dropboxuser, dropboxPath, localFolder, callback) {
+	var self = this;
+
+	this.getImages(dropboxuser, dropboxPath, function (err, images) {
+		if(err) return callback(err, []);
+
+		var localImages = [];
+
+		async.eachLimit(images, 50, function (image, $) {
+			self.downwloadFile(dropboxuser, image, localFolder, function (err, localImage) {
+				if(err) return $(null); //dont stop if errors occur
+
+				localImages.push(localImage);
+
+				$();
+			});
+		}, function (err) {
+			callback(err, localImages);
 		});
 	});
 }

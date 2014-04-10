@@ -9,6 +9,7 @@ var passport = require('passport');
 var DropboxStrategy = require('passport-dropbox').Strategy;
 var Dropbox = require('./dropbox');
 var config = require('./config');
+var utils = require('./utils');
 
 var dropbox = new Dropbox({app_key:config.dropbox.app_key, app_secret: config.dropbox.app_secret});
 var serverAddress = 'http://localhost:3000';
@@ -197,14 +198,14 @@ everyone.now.setSelectedFolder = function(folder, callback) {
 	// also get the images from that folder:
 	// it's slow, so do it here
 
-	dropbox.getAbsoluteImages(settings.dropboxuser, folder, function (err, images) {
+	dropbox.downloadImages(settings.dropboxuser, folder, config.imagesfolder, function (err, localimages) {
 		if(err) return console.log(err);
 
 		settings.images = {};
 
-		for (var i = 0; i < images.length; i++) {
-			var file = images[i];
-			var name = path.basename( file );
+		for (var i = 0; i < localimages.length; i++) {
+			var file = utils.wwwdfy(localimages[i]);
+			var name = utils.basenameWithoutExtension(file);
 			settings.images[file] = name;
 		};
 

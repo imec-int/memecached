@@ -198,6 +198,8 @@ everyone.now.setSelectedFolder = function(folder, callback) {
 	// it's slow, so do it here
 
 	dropbox.getAbsoluteImages(settings.dropboxuser, folder, function (err, images) {
+		if(err) return console.log(err);
+
 		settings.images = {};
 
 		for (var i = 0; i < images.length; i++) {

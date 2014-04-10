@@ -68,7 +68,7 @@ Dropbox.prototype.getAbsoluteImages = function  (dropboxuser, dropboxPath, callb
 	var self = this;
 
 	this.getImages(dropboxuser, dropboxPath, function (err, images) {
-		if(err) return callback(err);
+		if(err) return callback(err, []);
 
 		var absoluteImages = [];
 

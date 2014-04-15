@@ -108,9 +108,7 @@ app.get('/', function (req, res){
 	initPassport();
 
 	//res.sendfile(__dirname + '/index.html');
-	res.render('client', {
-		title: 'Weme'
-	});
+	res.sendfile(__dirname+'/public/client.html');
 });
 
 app.get('/admin', function (req, res){

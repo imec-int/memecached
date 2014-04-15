@@ -107,7 +107,10 @@ app.get('/', function (req, res){
 	serverAddress = req.protocol + "://" + req.get('host');
 	initPassport();
 
-	res.sendfile(__dirname + '/index.html');
+	//res.sendfile(__dirname + '/index.html');
+	res.render('client', {
+		title: 'Weme'
+	});
 });
 
 app.get('/admin', function (req, res){
@@ -212,5 +215,3 @@ everyone.now.setSelectedFolder = function(folder, callback) {
 		everyone.now.populateMemePicker(settings.images);
 	});
 };
-
-

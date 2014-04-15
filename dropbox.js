@@ -3,7 +3,7 @@ var async = require('async');
 var fs = require('fs');
 var path = require('path');
 
-var dropboxOAuth
+var dropboxOAuth;
 
 function Dropbox(options){
 	dropboxOAuth = new OAuth(

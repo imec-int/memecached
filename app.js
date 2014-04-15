@@ -7,6 +7,7 @@ var http = require('http')
 var path = require('path');
 var passport = require('passport');
 var DropboxStrategy = require('passport-dropbox').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var Dropbox = require('./dropbox');
 var config = require('./config');
 var utils = require('./utils');
@@ -58,16 +59,20 @@ var webserver = http.createServer(app).listen(app.get('port'), function(){
 
 // Passport (Dropbox):
 
+// eventueel sessies persisteren in database en users ook
+// voorlopig: {id1: user1, id2: user2, ...}
+var users = {};
+
 function initPassport () {
 	if(passportInitialized) return;
 
 
 	passport.serializeUser(function (user, done) {
-		done(null, user);
+		done(null, user.id);
 	});
 
-	passport.deserializeUser(function (user, done) {
-		done(null, user);
+	passport.deserializeUser(function (id, done) {
+		done(null, (users[id] ? users[id] : null));
 	});
 
 	passport.use(new DropboxStrategy({
@@ -80,16 +85,29 @@ function initPassport () {
 				token       : token,
 				secret      : tokenSecret,
 				id          : profile.id,
-				username    : profile.username,
+				// username is undefined in dropbox
+				// username    : profile.username,
 				displayName : profile.displayName
 			};
 
 			settings.dropboxuser = user;
-			console.log(settings.dropboxuser);
-
+			users[user.id] = user;
 			return done(null, user);
 		}
 	));
+
+	passport.use(new GoogleStrategy({
+		clientID: config.google.clientId,
+		clientSecret: config.google.clientSecret
+	}, function (accessToken, refreshToken, profile, done){
+			var user = profile._json;
+			// check of er nog geen andere user (buiten google) is met dit emailadres
+			user.token = accessToken;
+			users[user.id] = user;
+			return done(null, user);
+		}
+	));
+
 
 	passportInitialized = true;
 }
@@ -97,10 +115,25 @@ function initPassport () {
 
 app.get('/auth/dropbox', passport.authenticate('dropbox'));
 
+app.get('/auth/google',
+	passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile',
+											'https://www.googleapis.com/auth/userinfo.email'],
+									callbackURL: '/auth/google/callback'}));
+
+app.get('/auth/google/callback',
+	passport.authenticate('google', {failureRedirect: '/login/error', callbackURL: '/auth/google/callback'}),
+	function (req, res) {
+		// Successful authentication, redirect to root.
+		res.redirect('/');
+	}
+);
+
 app.get('/auth/dropbox/callback', passport.authenticate('dropbox', { failureRedirect: '/admin' }), function (req, res) {
 	// Successful authentication:
 	res.redirect('/admin');
 });
+
+
 
 
 app.get('/', function (req, res){

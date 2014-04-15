@@ -13,6 +13,7 @@
     "oauth": "git://github.com/SamDecrock/node-oauth",
     "passport-dropbox": "~0.1.2",
     "passport": "~0.2.0",
-    "async": "~0.7.0"
+    "async": "~0.7.0",
+    "passport-google-oauth": "~0.1.5"
   }
 }

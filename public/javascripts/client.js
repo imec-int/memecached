@@ -25,6 +25,24 @@ var Client = function (options){
       $("#p3").css("display","block");
       $("#memeTextTop").focus();
     });
+    $("#typeIndicatorTop").click(function(){
+        $("#memeTextTop").focus();
+    });
+    $("#typeIndicatorBottom").click(function(){
+        $("#memeTextBottom").focus();
+    });
+    $("#memeTextTop").focus(function(){
+      $("#typeIndicatorTop").attr("src","images/arrow_r.png");
+    });
+    $("#memeTextTop").blur(function(){
+      $("#typeIndicatorTop").attr("src","images/arrow_g.png");
+    });
+    $("#memeTextBottom").focus(function(){
+      $("#typeIndicatorBottom").attr("src","images/arrow_r.png");
+    });
+    $("#memeTextBottom").blur(function(){
+      $("#typeIndicatorBottom").attr("src","images/arrow_g.png");
+    });
   };
 
 
@@ -89,6 +107,10 @@ var Client = function (options){
       $(".memeText").css("width", i_w+"px");
       $("#memeTextTop").css("top", 40+"px");
       $("#memeTextBottom").css("top", i_w-90+"px");
+      $("#typeIndicatorTop").css("top", 40+"px");
+      $("#typeIndicatorBottom").css("top", i_w-90+"px");
+      $(".typeIndicator").css("left", parseInt($("#memeCanvas").css("margin-left")) -30);
+      // $(".typeIndicator").attr("pos", "top");
       $(".memeText").change(function(){
 
         drawText("top", $(".memeText").val().toUpperCase(),471,50);
@@ -108,6 +130,7 @@ var Client = function (options){
 
   var drawText = function(pos, text, width, height) {
     ctx.drawImage(document.getElementById("img0"),0,0);
+    ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
     log("type: "+text);
       var fontSize = 100;
       ctx.font = "bold " + fontSize + "px Arial";

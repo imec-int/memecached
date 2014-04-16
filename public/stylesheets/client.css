@@ -84,6 +84,10 @@ body{
   opacity: 1;
 }
 
+.typeIndicator{
+  position: absolute;
+
+}
 
 #p1{
   display: block;

@@ -48,6 +48,9 @@ app.configure(function(){
 	app.use(express.static(path.join(__dirname, 'public')));
 });
 
+// use ejs for files with html extension
+app.engine('html', require('ejs').renderFile);
+
 app.configure('development', function(){
 	app.use(express.errorHandler());
 });
@@ -139,6 +142,16 @@ app.get('/auth/dropbox/callback', passport.authenticate('dropbox', { failureRedi
 app.get('/', function (req, res){
 	serverAddress = req.protocol + "://" + req.get('host');
 	initPassport();
+	if(req.isAuthenticated()){
+		if(isAuthorized(req.user))
+			res.render('client.html', {iMindsConnected: true});
+		else {
+			req.logOut();
+			res.redirect('/');
+		}
+	} else{
+		res.render('client.html', {iMindsConnected: false});
+	}
 
 	//res.sendfile(__dirname + '/index.html');
 	res.sendfile(__dirname+'/public/client.html');
@@ -169,6 +182,18 @@ app.get('/admin', function (req, res){
 	}
 
 });
+
+app.get('/logout', function(req, res){
+	req.logOut();
+	res.redirect('/');
+});
+
+function isAuthorized(user){
+	// enkel iminds.be toelaten
+	if(user.email && user.email.split('@')[1] == 'iminds.be')
+		return true;
+	else return false;
+}
 
 
 
@@ -232,6 +257,9 @@ everyone.now.setSelectedFolder = function(folder, callback) {
 	// also get the images from that folder:
 	// it's slow, so do it here
 
+	// FOR NOW: HARDCODE THE PATH; listing all subdirs of every folder is slow!!
+	// only listing the subdirs when a folder is selected requires too much effort
+	folder = "/DWW Strategy/Foto's/GESELECTEERDE FOTO'S/optimized";
 	dropbox.downloadImages(settings.dropboxuser, folder, config.imagesfolder, function (err, localimages) {
 		if(err) return console.log(err);
 

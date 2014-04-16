@@ -23,6 +23,7 @@ var Client = function (options){
       $("#p1").css("display","none");
       $("#p2").css("display","none");
       $("#p3").css("display","block");
+      $("#memeTextTop").focus();
     });
   };
 
@@ -76,7 +77,7 @@ var Client = function (options){
     // get chosen image (from <img>)
     var img = document.getElementById("img0");
     //draw image
-    ctx.drawImage(img,0,0,i_w,i_h,0,0,i_w,i_h);
+    ctx.drawImage(img,0,0,640,640,0,0,i_w,i_h);
 
     setTimeout(function(){
       ctx.textAlign = "center";
@@ -86,9 +87,17 @@ var Client = function (options){
       //prepare textfield
       $(".memeText").css("left", $("#memeCanvas").css("margin-left"));
       $(".memeText").css("width", i_w+"px");
+      $("#memeTextTop").css("top", 40+"px");
+      $("#memeTextBottom").css("top", i_w-90+"px");
       $(".memeText").change(function(){
 
-        drawText("top", $(".memeText").val(),471,50);
+        drawText("top", $(".memeText").val().toUpperCase(),471,50);
+        // ctx.strokeText($(this).val(), 0, 50);
+        // ctx.fillText($(this).val(), 0, 50);
+      });
+      $(".memeText").keyup(function(){
+
+        drawText("top", $(".memeText").val().toUpperCase(),471,50);
         // ctx.strokeText($(this).val(), 0, 50);
         // ctx.fillText($(this).val(), 0, 50);
       });

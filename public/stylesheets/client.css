@@ -78,10 +78,12 @@ body{
   height: 50px;
   font-weight: bold;
   font-size: 32px;
-  background-color: rgba(255,255,255,0.2);
-  border: solid black 2px;
-  opacity: 0.02;
+  color: rgba(255,255,255,0.02);
+  background-color: rgba(255,255,255,0.02);
+  border: solid rgba(0,0,0,0.01) 2px;
+  opacity: 1;
 }
+
 
 #p1{
   display: block;

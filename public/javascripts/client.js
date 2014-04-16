@@ -112,16 +112,18 @@ var Client = function (options){
       $(".typeIndicator").css("left", parseInt($("#memeCanvas").css("margin-left")) -30);
       // $(".typeIndicator").attr("pos", "top");
       $(".memeText").change(function(){
-
-        drawText("top", $(".memeText").val().toUpperCase(),471,50);
-        // ctx.strokeText($(this).val(), 0, 50);
-        // ctx.fillText($(this).val(), 0, 50);
+        ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
+        //if($(this).attr("name")=="top")
+          drawText("top", $("#memeTextTop").val().toUpperCase(),i_w,50);
+        //if($(this).attr("name")=="bottom")
+          drawText("bottom", $("#memeTextBottom").val().toUpperCase(),i_w,50);
       });
       $(".memeText").keyup(function(){
-
-        drawText("top", $(".memeText").val().toUpperCase(),471,50);
-        // ctx.strokeText($(this).val(), 0, 50);
-        // ctx.fillText($(this).val(), 0, 50);
+        ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
+        //if($(this).attr("name")=="top")
+          drawText("top", $("#memeTextTop").val().toUpperCase(),i_w,50);
+        //if($(this).attr("name")=="bottom")
+          drawText("bottom", $("#memeTextBottom").val().toUpperCase(),i_w,50);
       });
     },100);
 
@@ -129,24 +131,24 @@ var Client = function (options){
   };
 
   var drawText = function(pos, text, width, height) {
-    ctx.drawImage(document.getElementById("img0"),0,0);
-    ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
+    //ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
     log("type: "+text);
       var fontSize = 100;
       ctx.font = "bold " + fontSize + "px Arial";
-      // while(1) {
-      //     ctx.font = "bold " + fontSize + "px Arial";
-      //     if( (ctx.measureText(text).width < (width-15)) && (fontSize < height/10) ) {
-      //         break;
-      //     }
-      //     fontSize-=2;
-      // }
+      while(1) {
+          ctx.font = "bold " + fontSize + "px Arial";
+          log(ctx.measureText(text).width);
+        if( (ctx.measureText(text).width < (width-15)) /*&& (fontSize < height/10)*/ ) {
+              break;
+          }
+          fontSize-=2;
+      }
 
       var y;
       if(pos == "top")
           y = fontSize + 15;
       else if(pos == "bottom") {
-          y = height - 15;
+          y = parseInt($("#memeCanvas").attr("height")) - 50;
       }
       ctx.strokeText(text, width/2, y);
       ctx.fillText(text, width/2, y);

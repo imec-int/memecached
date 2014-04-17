@@ -26,6 +26,10 @@ var Client = function (options){
       $("#p3").css("display","block");
       $("#memeTextTop").focus();
     });
+    $("#doneButton").click(function(){
+      var img  = document.getElementById("memeCanvas").toDataURL("image/png");
+      document.write('<img src="'+img+'"/>');
+    });
     $("#typeIndicatorTop").click(function(){
         $("#memeTextTop").focus();
     });
@@ -99,19 +103,21 @@ var Client = function (options){
     var i_w = $("#img0").width();
     var i_h = $("#img0").height();
 
-    $("#memeCanvas").attr("width",i_w);
-    $("#memeCanvas").attr("height",i_h);
+    $("#memeCanvas").attr("width",640);
+    $("#memeCanvas").attr("height",640);
+
+
     log(i_w+" - "+i_h)
     // get chosen image (from <img>)
     var img = document.getElementById(chosenPhotoId);
     //draw image
-    ctx.drawImage(img,0,0,640,640,0,0,i_w,i_h);
+    ctx.drawImage(img,0,0,640,640,0,0,640,640);
 
     setTimeout(function(){
       ctx.textAlign = "center";
       ctx.fillStyle = "#fff";
       ctx.strokeStyle = "#000";
-      ctx.lineWidth = 6;
+      ctx.lineWidth = 10;
       //prepare textfield
       $(".memeText").css("left", $("#memeCanvas").css("margin-left"));
       $(".memeText").css("width", i_w+"px");
@@ -124,17 +130,17 @@ var Client = function (options){
       $(".memeText").change(function(){
         ctx.drawImage(document.getElementById(chosenPhotoId),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
         //if($(this).attr("name")=="top")
-          drawText("top", $("#memeTextTop").val().toUpperCase(),i_w,50);
+          drawText("top", $("#memeTextTop").val().toUpperCase(),640,50);
         //if($(this).attr("name")=="bottom")
-          drawText("bottom", $("#memeTextBottom").val().toUpperCase(),i_w,50);
+          drawText("bottom", $("#memeTextBottom").val().toUpperCase(),640,50);
       });
       $(".memeText").keyup(function(e){
         //log(e.which);
         ctx.drawImage(document.getElementById(chosenPhotoId),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
         //if($(this).attr("name")=="top")
-          drawText("top", $("#memeTextTop").val().toUpperCase(),i_w,50);
+          drawText("top", $("#memeTextTop").val().toUpperCase(),640,50);
         //if($(this).attr("name")=="bottom")
-          drawText("bottom", $("#memeTextBottom").val().toUpperCase(),i_w,50);
+          drawText("bottom", $("#memeTextBottom").val().toUpperCase(),640,50);
         if ( e.which == 13 ) {
           log($(this)[0]);
           if($(this)[0].id == "memeTextBottom"){
@@ -153,10 +159,10 @@ var Client = function (options){
   var drawText = function(pos, text, width, height) {
     //ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
     log("type: "+text);
-      var fontSize = 100;
-      ctx.font = "bold " + fontSize + "px Arial";
+      var fontSize = 70;
+      ctx.font = "bold " + fontSize + "px arial";
       while(1) {
-          ctx.font = "bold " + fontSize + "px Arial";
+          ctx.font = "bold " + fontSize + "px arial";
           // log(ctx.measureText(text).width);
         if( (ctx.measureText(text).width < (width-15)) /*&& (fontSize < height/10)*/ ) {
               break;
@@ -166,9 +172,9 @@ var Client = function (options){
 
       var y;
       if(pos == "top")
-          y = fontSize + 15;
+          y = fontSize + 65;
       else if(pos == "bottom") {
-          y = parseInt($("#memeCanvas").attr("height")) - 50;
+          y = parseInt($("#memeCanvas").attr("height")) - 90;
       }
       ctx.strokeText(text, width/2, y);
       ctx.fillText(text, width/2, y);
@@ -177,9 +183,18 @@ var Client = function (options){
   var resize = function(){
     resizeCarousel();
     var windowHeight = $(window).height();
-    $("#logo").height(windowHeight*0.12);
+
     // $("#owl-results-container").height(windowHeight*0.8);
-    if(isMobileLandscape()){
+    if(!isMobileLandscape()){
+      $("#logo").height(windowHeight*0.12);
+      $("#memeCanvas").height(windowHeight*0.6);
+      $(".memeText").css("left", $("#memeCanvas").css("margin-left"));
+      $(".memeText").css("width", $("#memeCanvas").css("width")+"px");
+      $("#memeTextTop").css("top", 40+"px");
+      $("#memeTextBottom").css("top", parseInt($("#memeCanvas").css("height"))-90+"px");
+      $("#typeIndicatorTop").css("top", 40+"px");
+      $("#typeIndicatorBottom").css("top", parseInt($("#memeCanvas").css("height"))-90+"px");
+      $(".typeIndicator").css("left", parseInt($("#memeCanvas").css("margin-left")) -30+"px");
       // $("#owl-results-container").toggleClass("splitMobile");
       // $(".wemeButton").toggleClass("splitMobile");
       // log("splitMobile");
@@ -189,8 +204,8 @@ var Client = function (options){
 
   var resizeCarousel = function(){
     var max = Math.max($(window).height(),$(window).width());
-    $("#owl-results img").css("width", max);
-    $("#owl-results img").css("height", max);
+    $("#owl-results img").css("width", 640);
+    // $("#owl-results img").css("height", 640);
     log("resize to "+max+"x"+max);
     log("Mob Lndsc: "+isMobileLandscape());
     // console.log("resize to "+max+"x"+max);

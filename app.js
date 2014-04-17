@@ -98,7 +98,6 @@ function initPassport () {
 			return done(null, user);
 		}
 	));
-
 	passport.use(new GoogleStrategy({
 		clientID: config.google.clientId,
 		clientSecret: config.google.clientSecret
@@ -110,8 +109,6 @@ function initPassport () {
 			return done(null, user);
 		}
 	));
-
-
 	passportInitialized = true;
 }
 
@@ -121,7 +118,8 @@ app.get('/auth/dropbox', passport.authenticate('dropbox'));
 app.get('/auth/google',
 	passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile',
 											'https://www.googleapis.com/auth/userinfo.email'],
-									callbackURL: '/auth/google/callback'}));
+									callbackURL: '/auth/google/callback', prompt: 'select_account'}));
+// 'prompt' parameter: to force account selection on mobile: see http://stackoverflow.com/questions/14384354/force-google-account-chooser/14393492#14393492
 
 app.get('/auth/google/callback',
 	passport.authenticate('google', {failureRedirect: '/login/error', callbackURL: '/auth/google/callback'}),

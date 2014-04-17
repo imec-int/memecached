@@ -2,12 +2,13 @@ var Client = function (options){
 
   var resizeInt = 0;
   var chosenPhoto = null;
+  var loadscreenClick = false;
 
   var init = function (){
     addHandlers();
+    timeoutLoadscreen();
     initCarousel();
     resize();
-
   };
 
   var addHandlers = function () {
@@ -16,6 +17,7 @@ var Client = function (options){
       resizeInt = setTimeout(resize, 150);
     });
     $("#loadscreen").click(function(){
+      loadscreenClick = true;
       $("#loadscreen").animate(
         {"background-position-y":"0px","opacity":0} ,300,"linear",
         function(){
@@ -60,6 +62,18 @@ var Client = function (options){
     });
   };
 
+var timeoutLoadscreen = function(){
+  setTimeout(function(){
+    if(!loadscreenClick){
+      $("#loadscreen").off("click");
+      $("#loadscreen").animate(
+        {"background-position-y":"0px","opacity":0} ,300,"linear",
+        function(){
+          $("#loadscreen").css("display","none");
+      });
+    }
+  }, 4200);
+}
 
   var initCarousel = function() {
     $("#owl-results").owlCarousel({
@@ -215,6 +229,7 @@ var Client = function (options){
   var resizeCarousel = function(){
     var max = Math.max($(window).height(),$(window).width());
     $("#owl-results img").css("width", 640);
+    // $("#owl-results img")
     // $("#owl-results img").css("height", 640);
     log("resize to "+max+"x"+max);
     log("Mob Lndsc: "+isMobileLandscape());

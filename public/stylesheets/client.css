@@ -26,6 +26,20 @@ body{
   position: relative;
 }
 
+#loadscreen{
+  position: fixed;
+  top:0;
+  left:0;
+  background-image: url("../images/front_logo.png");
+  background-repeat: no-repeat;
+  background-size: 162px 209px;
+  background-position: center 100px;
+  background-color: #303D4E;
+  width:100%;
+  padding-bottom:200%;
+  z-index:500;
+}
+
 #logo{
   position: relative;
   background-image: url("../images/weme.png");

@@ -15,6 +15,16 @@ var Client = function (options){
       clearTimeout(resizeInt);
       resizeInt = setTimeout(resize, 150);
     });
+    $("#loadscreen").click(function(){
+      $("#loadscreen").animate(
+        {"background-position-y":"0px","opacity":0} ,300,"linear",
+        function(){
+          $("#loadscreen").css("display","none");
+      });
+      // $("#loadscreen").fadeOut(1);
+
+      $("#p1").css("display","block");
+    });
     $("#wemeButton").click(function(){
       $("#p1").css("display","none");
       $("#p2").css("display","block");

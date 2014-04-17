@@ -3,8 +3,67 @@ var Client = function (options){
   var resizeInt = 0;
   var chosenPhoto = null;
   var loadscreenClick = false;
+  var funnyLoading = [
+    "Counting pixels...",
+    "Spanking the server...",
+    "Waiting for Googleman...",
+    "Taking out the trash...",
+    "Subtracting numbers...",
+    "Learning Pi to 56 digits...",
+    "Measuring your height...",
+    "Measuring your weight...",
+    "Estimating oxygen level...",
+    "Creating green house gasses...",
+    "3D printing a mini me...",
+    "Finding Wally...",
+    "Warming up to sexyness...",
+    "Measuring your weight...",
+    "Watching Facebook timeline...",
+    "Counting foodie pics from @elidesc...",
+    "Estimating oxygen level...",
+    "Looking for myspace...",
+    "Downloading myself...",
+    "Installing lots of things...",
+    "Doing stuff with the neighbour...",
+    "Training robot army...",
+    "Turning a yellow switch...",
+    "Shaving some parts...",
+    "Bitchslapping the CPU...",
+    "Writing to Telenet...",
+    "Uploading your face to Badoo...",
+    "Doing something mysterious...",
+    "French kissing a frog...",
+    "Creating a 3D president...",
+    "Getting healthy vegetables...",
+    "Watching your nose...",
+    "Thinking about midgets...",
+    "Dreaming about laser sharks...",
+    "Cleaning file cabin...",
+    "Downloading the top charts...",
+    "Going to your location...",
+    "Multiplying some random numbers...",
+    "Watching You****.com...",
+    "Entering the dark side...",
+    "Talking to Googleman...",
+    "Talking to baby Jesus...",
+    "Analyzing code and stuff...",
+    "Looking you in the eyes...",
+    "Counting your friends...",
+    "Calculating my temperature...",
+    "Turning you on...",
+    "Checking the girl next door...",
+    "Subscribing to Badoo...",
+    "Looking at your eyebrows...",
+    "Getting ready for sexyness...",
+    "Breeding bits and bytes...",
+    "Loving you just the way you are...",
+    "Drawing something dirty...",
+    "Watching freaking pandas...",
+    "Feeding pandas..."
+  ]
 
   var init = function (){
+    startLoading()
     addHandlers();
     timeoutLoadscreen();
     initCarousel();
@@ -62,18 +121,22 @@ var Client = function (options){
     });
   };
 
-var timeoutLoadscreen = function(){
-  setTimeout(function(){
-    if(!loadscreenClick){
-      $("#loadscreen").off("click");
-      $("#loadscreen").animate(
-        {"background-position-y":"0px","opacity":0} ,300,"linear",
-        function(){
-          $("#loadscreen").css("display","none");
-      });
-    }
-  }, 4200);
-}
+  var startLoading = function(){
+    $("#loadingText").text(funnyLoading[Math.floor(Math.random()*funnyLoading.length)]);
+  };
+
+  var timeoutLoadscreen = function(){
+    setTimeout(function(){
+      if(!loadscreenClick){
+        $("#loadscreen").off("click");
+        $("#loadscreen").animate(
+          {"background-position-y":"0px","opacity":0} ,400,"linear",
+          function(){
+            $("#loadscreen").css("display","none");
+        });
+      }
+    }, 2500);
+  };
 
   var initCarousel = function() {
     $("#owl-results").owlCarousel({
@@ -82,12 +145,13 @@ var timeoutLoadscreen = function(){
         pagination : false,
         slideSpeed : 300,
         paginationSpeed : 400,
-        items: 3,
-        itemsDesktop: [1199,2],
-        itemsDesktopSmall: [979,2],
-        itemsTablet: [768,1],
-        itemsTabletSmall: [768,1],
-        itemsMobile: [479,1],
+        singleItem:true,
+        // items: 3,
+        // itemsDesktop: [1199,2],
+        // itemsDesktopSmall: [979,2],
+        // itemsTablet: [768,1],
+        // itemsTabletSmall: [768,1],
+        // itemsMobile: [479,1],
         navigationText : ["vorige","volgende"],
         autoplay: 1500,
         stopOnHover: true

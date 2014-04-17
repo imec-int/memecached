@@ -12,6 +12,7 @@ body{
   background-color: #303D4E;
   width: 100%;
   height: 100%;
+  min-height: 100%;
   position: relative;
   overflow: hidden;
 }
@@ -33,14 +34,24 @@ body{
   position: fixed;
   top:0;
   left:0;
-  background-image: url("../images/front_logo.png");
+  /*background-image: url("../images/front_logo.png");
   background-repeat: no-repeat;
-  background-size: 162px 209px;
-  background-position: center 100px;
+  background-size: 324px 418px;
+  background-position: center 100px;*/
   background-color: #303D4E;
   width:100%;
   padding-bottom:200%;
   z-index:500;
+}
+
+#loadscreen p{
+  font-family: 'gothamcondensed_bookregular';
+  text-transform: uppercase;
+  font-size: 48px;
+  color: #FFF;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 30px;
 }
 
 #logo{
@@ -101,6 +112,7 @@ body{
   max-height: 30%;
   height: 30%;
   overflow: scroll;
+  display:none;
 }
 
 .button{
@@ -121,6 +133,41 @@ body{
   cursor: pointer;
   font-family: 'gothamcondensed_bookregular';
   text-transform: uppercase;
+}
+
+#signinscreen{
+  position: fixed;
+  top:0;
+  left:0;
+  background-color: #303D4E;
+  width:100%;
+  padding-bottom:200%;
+  z-index:500;
+}
+
+#signinlogo{
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 162px;
+  margin-bottom: 10px;
+  margin-top: 10%;
+}
+
+.signButton{
+  display:block;
+  width: 160px;
+  height: 36px;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'gothamcondensed_bookregular';
+  text-transform: uppercase;
+  font-size: 36px;
+  color: #FFF;
+  text-decoration: none;
+  text-align: center;
+  background-color: #FD8066;
 }
 
 #memeCanvas{
@@ -148,8 +195,8 @@ body{
 
 }
 
-#hiddenSubmit{
-  opacity: 0;
+.owl-item .fullItem{
+  text-align: center;
 }
 
 #p1{

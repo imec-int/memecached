@@ -15,10 +15,15 @@
 <body>
 
   <%if (!iMindsConnected) {%>
-    <a class="signButton" href="/auth/google">Sign In</a>
+    <div id="signinscreen">
+      <img id="signinlogo" src="images/front_logo.png" width="162px" height="209px" />
+      <a class="signButton" href="/auth/google">iMinds login</a>
+    </div>
   <%} else{%>
   <div id="loadscreen">
-    &#160;
+    <img id="signinlogo" src="images/front_logo.png" width="162px" height="209px" />
+    <p id="loadingText">
+    </p>
   </div>
   <p class="console"></p>
   <div id="logo">

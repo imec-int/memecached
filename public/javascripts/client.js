@@ -189,7 +189,7 @@ var Client = function (options){
       $("#logo").height(windowHeight*0.12);
       $("#memeCanvas").height(windowHeight*0.6);
       $(".memeText").css("left", $("#memeCanvas").css("margin-left"));
-      $(".memeText").css("width", $("#memeCanvas").css("width")+"px");
+      $(".memeText").css("width", $("#memeCanvas").css("width"));
       $("#memeTextTop").css("top", 40+"px");
       $("#memeTextBottom").css("top", parseInt($("#memeCanvas").css("height"))-90+"px");
       $("#typeIndicatorTop").css("top", 40+"px");
@@ -233,6 +233,8 @@ var client;
 var ctx;
 
 $(function(){
+  if(FastClick)
+    FastClick.attach(document.body);
   client = new Client();
   client.init();
 });

@@ -9,13 +9,16 @@
   <link href="stylesheets/client.css" rel="stylesheet">
   <link href="vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
   <link href="vendor/owl-carousel/owl.theme.css" rel="stylesheet">
-<!--   <link rel="stylesheet" href="font/stylesheet.css" type="text/css" charset="utf-8" /> -->
+  <link rel="stylesheet" href="font/stylesheet.css" type="text/css" charset="utf-8" />
 
 </head>
 <body>
   <p class="console"></p>
+  <div id="logo">
+    &#160;
+  </div>
   <div id="p1" class="container">
-    <div id="owl-results-container">
+    <div id="owl-results-container" class="my-owl-container">
       <div id="owl-results" class="owl-carousel ">
         <div class="item fullItem"><img src="images/results/1.png" alt=""></div>
         <div class="item fullItem"><img src="images/results/2.png" alt=""></div>
@@ -25,11 +28,11 @@
       </div>
     </div>
     <div id="wemeButton" class="button">
-      Maak ook zelf een WeMe!
+      Maak je eigen Weme
     </div>
   </div>
   <div id="p2" class="container">
-    <div id="owl-results-container">
+    <div id="owl-results-container" class="my-owl-container">
       <div id="owl-choose" class="owl-carousel ">
         <div class="item fullItem"><img id="img0" src="images/photos/bedenkelijk_kijkende_wim.jpg" alt=""></div>
         <div class="item fullItem"><img id="img1" src="images/photos/devinger.jpg" alt=""></div>
@@ -42,9 +45,9 @@
     </div>
   </div>
   <div id="p3" class="container">
-    <form>
-      <input type="text" name="top" class="memeText" id="memeTextTop">
-      <input type="text" name="bottom" class="memeText" id="memeTextBottom">
+    <form id="memeForm">
+      <input type="text" required="required"  name="top" class="memeText" id="memeTextTop">
+      <input type="text" required="required"  name="bottom" class="memeText" id="memeTextBottom">
     </form>
     <img id="typeIndicatorTop" class="typeIndicator" src="images/arrow_r.png" width="64px" height="64px" />
     <img id="typeIndicatorBottom" class="typeIndicator" src="images/arrow_g.png" width="64px" height="64px" />

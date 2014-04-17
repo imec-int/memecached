@@ -1,6 +1,7 @@
 var Client = function (options){
 
   var resizeInt = 0;
+  var chosenPhoto = null;
 
   var init = function (){
     addHandlers();
@@ -49,7 +50,7 @@ var Client = function (options){
   var initCarousel = function() {
     $("#owl-results").owlCarousel({
 
-        navigation : true, // Show next and prev buttons
+        navigation : false, // Show next and prev buttons
         pagination : false,
         slideSpeed : 300,
         paginationSpeed : 400,
@@ -67,7 +68,7 @@ var Client = function (options){
 
     $("#owl-choose").owlCarousel({
 
-        navigation : true, // Show next and prev buttons
+        navigation : false, // Show next and prev buttons
         pagination : false,
         slideSpeed : 300,
         paginationSpeed : 400,
@@ -78,9 +79,18 @@ var Client = function (options){
         itemsTabletSmall: [768,1],
         itemsMobile: [479,1],
         navigationText : ["vorige","volgende"],
-        autoplay: false
+        autoplay: false,
+        afterMove: choosePhoto,
+        addClassActive: true
 
     });
+    choosePhoto();
+  };
+
+  var choosePhoto = function(){
+    // chosenPhoto
+    chosenPhotoId = $(".active")[0].children[0].children[0].id;
+    log("=> "+chosenPhotoId);
   };
 
   var initCanvas = function(){
@@ -93,7 +103,7 @@ var Client = function (options){
     $("#memeCanvas").attr("height",i_h);
     log(i_w+" - "+i_h)
     // get chosen image (from <img>)
-    var img = document.getElementById("img0");
+    var img = document.getElementById(chosenPhotoId);
     //draw image
     ctx.drawImage(img,0,0,640,640,0,0,i_w,i_h);
 
@@ -112,18 +122,28 @@ var Client = function (options){
       $(".typeIndicator").css("left", parseInt($("#memeCanvas").css("margin-left")) -30);
       // $(".typeIndicator").attr("pos", "top");
       $(".memeText").change(function(){
-        ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
+        ctx.drawImage(document.getElementById(chosenPhotoId),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
         //if($(this).attr("name")=="top")
           drawText("top", $("#memeTextTop").val().toUpperCase(),i_w,50);
         //if($(this).attr("name")=="bottom")
           drawText("bottom", $("#memeTextBottom").val().toUpperCase(),i_w,50);
       });
-      $(".memeText").keyup(function(){
-        ctx.drawImage(document.getElementById("img0"),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
+      $(".memeText").keyup(function(e){
+        //log(e.which);
+        ctx.drawImage(document.getElementById(chosenPhotoId),0,0,640,640,0,0,$("#memeCanvas").attr("width"),$("#memeCanvas").attr("height"));
         //if($(this).attr("name")=="top")
           drawText("top", $("#memeTextTop").val().toUpperCase(),i_w,50);
         //if($(this).attr("name")=="bottom")
           drawText("bottom", $("#memeTextBottom").val().toUpperCase(),i_w,50);
+        if ( e.which == 13 ) {
+          log($(this)[0]);
+          if($(this)[0].id == "memeTextBottom"){
+            $("#memeTextBottom").blur();
+            log("bottom start");
+          }else{
+            $("#memeTextBottom").focus();
+          }
+        }
       });
     },100);
 
@@ -137,7 +157,7 @@ var Client = function (options){
       ctx.font = "bold " + fontSize + "px Arial";
       while(1) {
           ctx.font = "bold " + fontSize + "px Arial";
-          log(ctx.measureText(text).width);
+          // log(ctx.measureText(text).width);
         if( (ctx.measureText(text).width < (width-15)) /*&& (fontSize < height/10)*/ ) {
               break;
           }
@@ -156,10 +176,13 @@ var Client = function (options){
 
   var resize = function(){
     resizeCarousel();
+    var windowHeight = $(window).height();
+    $("#logo").height(windowHeight*0.12);
+    // $("#owl-results-container").height(windowHeight*0.8);
     if(isMobileLandscape()){
-      $("#owl-results-container").toggleClass("splitMobile");
-      $(".wemeButton").toggleClass("splitMobile");
-      log("splitMobile");
+      // $("#owl-results-container").toggleClass("splitMobile");
+      // $(".wemeButton").toggleClass("splitMobile");
+      // log("splitMobile");
     }
 
   }

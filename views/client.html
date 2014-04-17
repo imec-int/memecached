@@ -9,35 +9,43 @@
   <link href="stylesheets/client.css" rel="stylesheet">
   <link href="vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
   <link href="vendor/owl-carousel/owl.theme.css" rel="stylesheet">
-<!--   <link rel="stylesheet" href="font/stylesheet.css" type="text/css" charset="utf-8" /> -->
+  <link rel="stylesheet" href="font/stylesheet.css" type="text/css" charset="utf-8" />
 
 </head>
 <body>
-  <p class="console"></p>
+
   <%if (!iMindsConnected) {%>
-    <a href="/auth/google">Connect with your iMinds Google account</a>
+    <a class="signButton" href="/auth/google">Sign In</a>
   <%} else{%>
+  <div id="loadscreen">
+    &#160;
+  </div>
+  <p class="console"></p>
+  <div id="logo">
+    &#160;
+  </div>
   <div id="p1" class="container">
-    <div id="owl-results-container">
+    <div id="owl-results-container" class="my-owl-container">
       <div id="owl-results" class="owl-carousel ">
-        <div class="item fullItem"><img src="images/results/1.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/2.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/3.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/4.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/5.png" alt=""></div>
+        <div class="item fullItem"><img src="images/results/0001.png" alt=""></div>
+        <div class="item fullItem"><img src="images/results/0002.png" alt=""></div>
+        <div class="item fullItem"><img src="images/results/0003.png" alt=""></div>
+        <div class="item fullItem"><img src="images/results/0004.png" alt=""></div>
+        <div class="item fullItem"><img src="images/results/0005.png" alt=""></div>
       </div>
     </div>
     <div id="wemeButton" class="button">
-      Maak ook zelf een WeMe!
+      Maak je eigen Weme
     </div>
   </div>
   <div id="p2" class="container">
-    <div id="owl-results-container">
+    <div id="owl-results-container" class="my-owl-container">
       <div id="owl-choose" class="owl-carousel ">
         <div class="item fullItem"><img id="img0" src="images/photos/bedenkelijk_kijkende_wim.jpg" alt=""></div>
         <div class="item fullItem"><img id="img1" src="images/photos/devinger.jpg" alt=""></div>
         <div class="item fullItem"><img id="img2" src="images/photos/food.jpg" alt=""></div>
         <div class="item fullItem"><img id="img3" src="images/photos/kerst.jpg" alt=""></div>
+        <div class="item fullItem"><img id="img4" src="images/photos/telefoon.jpg" alt=""></div>
       </div>
     </div>
     <div id="selectButton" class="button">
@@ -45,10 +53,12 @@
     </div>
   </div>
   <div id="p3" class="container">
-    <form>
-      <input type="text" name="top" class="memeText" id="memeTextTop">
-      <input type="text" name="bottom" class="memeText" id="memeTextBottom">
+    <form id="memeForm">
+      <input type="text" required="required"  name="top" class="memeText" id="memeTextTop">
+      <input type="text" required="required"  name="bottom" class="memeText" id="memeTextBottom">
     </form>
+    <img id="typeIndicatorTop" class="typeIndicator" src="images/arrow_r.png" width="64px" height="64px" />
+    <img id="typeIndicatorBottom" class="typeIndicator" src="images/arrow_g.png" width="64px" height="64px" />
     <canvas id="memeCanvas">
     </canvas>
     <div id="doneButton" class="button">
@@ -56,6 +66,7 @@
     </div>
   </div>
   <%}%>
+  <script src="vendor/fastclick.js"></script>
   <script src="vendor/jquery-1.11.0.min.js"></script>
   <script src="vendor/owl-carousel/owl.carousel.js"></script>
   <script src="javascripts/client.js"></script>

@@ -13,6 +13,9 @@
 
 </head>
 <body>
+  <%if (!iMindsConnected) {%>
+    <a href="/auth/google">Connect with your iMinds Google account</a>
+  <%} else{%>
   <div id="loadscreen">
     &#160;
   </div>
@@ -61,7 +64,7 @@
       Publiceer
     </div>
   </div>
-
+  <%}%>
   <script src="vendor/fastclick.js"></script>
   <script src="vendor/jquery-1.11.0.min.js"></script>
   <script src="vendor/owl-carousel/owl.carousel.js"></script>

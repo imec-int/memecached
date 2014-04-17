@@ -154,7 +154,7 @@ app.get('/', function (req, res){
 	}
 
 	//res.sendfile(__dirname + '/index.html');
-	res.sendfile(__dirname+'/public/client.html');
+	// res.sendfile(__dirname+'/public/client.html');
 });
 
 app.get('/admin', function (req, res){

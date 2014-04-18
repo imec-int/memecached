@@ -183,7 +183,7 @@ app.get('/admin', function (req, res){
 	if(req.isAuthenticated()){
 		if(!isAuthorized(req.user)) //aka user is not logged in with his iMinds google but with dropbox
 			dropbox.getDropboxFolders(settings.dropboxuser, function (err, folders) {
-				res.render('admin', {
+				res.render('admin.html', {
 					title: 'Mix Memer | Select Dropbox folder',
 					isDropboxConnected: true,
 					folders: folders,
@@ -195,7 +195,7 @@ app.get('/admin', function (req, res){
 			res.redirect('/admin');
 		}
 	}else{
-		res.render('admin', {
+		res.render('admin.html', {
 			title: 'Mix Memer | Select Dropbox folder',
 			isDropboxConnected: false,
 			folders: [],

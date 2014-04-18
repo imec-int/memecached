@@ -1,7 +1,7 @@
 var Client = function (options){
 
   var resizeInt = 0;
-  var chosenPhoto = null;
+  var chosenPhotoId = "img0";
   var loadscreenClick = false;
   var funnyLoading = [
     "Counting pixels...",
@@ -165,12 +165,13 @@ var Client = function (options){
         pagination : false,
         slideSpeed : 300,
         paginationSpeed : 400,
-        items: 3,
-        itemsDesktop: [1199,2],
-        itemsDesktopSmall: [979,2],
-        itemsTablet: [768,1],
-        itemsTabletSmall: [768,1],
-        itemsMobile: [479,1],
+        singleItem:true,
+        // items: 3,
+        // itemsDesktop: [1199,2],
+        // itemsDesktopSmall: [979,2],
+        // itemsTablet: [768,1],
+        // itemsTabletSmall: [768,1],
+        // itemsMobile: [479,1],
         navigationText : ["vorige","volgende"],
         autoplay: false,
         afterMove: choosePhoto,
@@ -182,8 +183,10 @@ var Client = function (options){
 
   var choosePhoto = function(){
     // chosenPhoto
-    chosenPhotoId = $(".active")[0].children[0].children[0].id;
-    log("=> "+chosenPhotoId);
+    if($(".active").length > 0){
+      chosenPhotoId = $(".active")[0].children[0].children[0].id;
+      log("=> "+chosenPhotoId);
+    }
   };
 
   var initCanvas = function(){

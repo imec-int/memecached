@@ -9,4 +9,4 @@ exports.google = {
 }
 
 exports.photosfolder = __dirname + '/public/images/photos';
-exports.resultsfolder = __dirname + '/public/images/results';
+exports.resultsfolder = __dirname + '/public/images/results';exports.resultsfolder = __dirname + '/public/images/results';

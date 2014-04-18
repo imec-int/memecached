@@ -23,11 +23,26 @@ var settings = {
 	},
 	selectedfolder: null,
 	images: {},
-	results: []
 }
+
+var results = [];
+var sourcePhotos = [];
 
 function getSelectedFolder () {
 	return (settings.selectedfolder)?settings.selectedfolder + " ("+settings.dropboxuser.displayName+"'s Dropbox)": 'none';
+}
+
+function updateSourcePhotos(){
+	var files = fs.readdirSync(config.photosfolder);
+	var trimmed = [];
+	for(var i in files) {
+		if(files[i] != ".gitignore" && files[i] != ".DS_Store"){
+			console.log(files[i]);
+			trimmed.push(files[i]);
+		}
+	}
+	sourcePhotos = trimmed;
+	return trimmed;
 }
 
 function updateResults(){
@@ -76,6 +91,7 @@ var webserver = http.createServer(app).listen(app.get('port'), function(){
 
 
 updateResults();
+updateSourcePhotos();
 
 // Passport (Dropbox):
 
@@ -161,7 +177,9 @@ app.get('/', function (req, res){
 		if(isAuthorized(req.user)){
 			if(!results)
 				results = updateResults();
-			res.render('client.html', {iMindsConnected: true, resultaten: results});
+			if(!sourcePhotos)
+				sourcePhotos = updateSourcePhotos();
+			res.render('client.html', {iMindsConnected: true, resultaten: results, fotos:sourcePhotos});
 		}else {
 			req.logOut();
 			res.redirect('/');

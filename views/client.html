@@ -50,7 +50,7 @@
     <div id="owl-results-container" class="my-owl-container">
       <div id="owl-choose" class="owl-carousel ">
         <% for(var i=0; i<fotos.length; i++) {%>
-        <div class="item fullItem"><img src="images/photos/<%= fotos[i] %>" alt=""></div>
+        <div class="item fullItem"><img id="img<%= i %>" src="images/photos/<%= fotos[i] %>" alt=""></div>
         <% } %>
 <!--         <div class="item fullItem"><img id="img0" src="images/photos/bedenkelijk_kijkende_wim.jpg" alt=""></div>
         <div class="item fullItem"><img id="img1" src="images/photos/devinger.jpg" alt=""></div>

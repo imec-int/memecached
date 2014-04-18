@@ -46,17 +46,16 @@ function updateSourcePhotos(){
 }
 
 function updateResults(){
-	// REMOVES FIRST ELEMENT (.gitignore) !!!!!
 	var files = fs.readdirSync(config.resultsfolder);
-	files.shift();
-	// var trimmed = [files.length];
+	var trimmed = [];
 	for(var i in files) {
-		console.log(files[i]);
-		// if(files[i] != ".gitignore" && files[i] != ".DS_Store")
-		// 	trimmed.push(files[i])
+		if(files[i] != ".gitignore" && files[i] != ".DS_Store"){
+			console.log(files[i]);
+			trimmed.push(files[i]);
+		}
 	}
-	results = files;
-	return files;
+	results = trimmed;
+	return trimmed;
 }
 
 var app = express();
@@ -226,6 +225,19 @@ app.get('/admin', function (req, res){
 app.get('/logout', function(req, res){
 	req.logOut();
 	res.redirect('/');
+});
+
+app.post('/upload', function (req, res){
+	var data = req.body.image;
+	var name = req.body.name;
+
+	console.log("RECEIVED Meme "+ name);
+	var buf = new Buffer(data, 'base64');
+	name = (Date.now()) + '_' + name + '.png';
+	var uploadedFile = path.join(config.resultsfolder, name);
+	fs.writeFile(uploadedFile, buf);
+
+	res.send(200);
 });
 
 function isAuthorized(user){

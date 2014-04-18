@@ -98,8 +98,26 @@ var Client = function (options){
       $("#memeTextTop").focus();
     });
     $("#doneButton").click(function(){
-      var img  = document.getElementById("memeCanvas").toDataURL("image/png");
-      document.write('<img src="'+img+'"/>');
+      var data  = document.getElementById("memeCanvas").toDataURL("image/png");
+      data = data.replace('data:' + "image/png" + ';base64,', '');
+
+      var jqxhr = $.post("/upload", {"image":data,"name":chosenPhotoId}, function() {
+  				log("success");
+			})
+
+      // var xhr = new XMLHttpRequest();
+      // xhr.open('POST', "/xhrupload");
+      // // xhr.setRequestHeader("Cache-Control", "no-cache");
+  		// // xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  		// // xhr.setRequestHeader("Content-Type", "image/png");
+  		// // xhr.setRequestHeader("X-File-Name", chosenPhotoId+".png");
+      // xhr.onreadystatechange = function() {
+  		// 	if (xhr.readyState == 4) {
+  		// 		doneUploading( JSON.parse(xhr.responseText) );
+  		// 	}
+  		// }
+		  // xhr.send(data);
+      //document.write('<img src="'+img+'"/>');
     });
     $("#typeIndicatorTop").click(function(){
         $("#memeTextTop").focus();
@@ -136,6 +154,10 @@ var Client = function (options){
         });
       }
     }, 2500);
+  };
+
+  var doneUploading = function(res){
+    console.log(res);
   };
 
   var initCarousel = function() {

@@ -282,7 +282,7 @@ everyone.now.setSelectedFolder = function(folder, callback) {
 	// FOR NOW: HARDCODE THE PATH; listing all subdirs of every folder is slow!!
 	// only listing the subdirs when a folder is selected requires too much effort
 	folder = "/DWW Strategy/Foto's/GESELECTEERDE FOTO'S/optimized";
-	dropbox.downloadImages(settings.dropboxuser, folder, config.imagesfolder, function (err, localimages) {
+	dropbox.downloadImages(settings.dropboxuser, folder, config.photosfolder, function (err, localimages) {
 		if(err) return console.log(err);
 
 		settings.images = {};

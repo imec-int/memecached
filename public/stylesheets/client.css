@@ -8,6 +8,8 @@
   margin-right: auto;
 }
 
+
+
 body{
   background-color: #303D4E;
   width: 100%;
@@ -51,7 +53,7 @@ body{
   color: #FFF;
   text-decoration: none;
   text-align: center;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 #logo{
@@ -126,6 +128,7 @@ body{
   color: #FFF;
   display: block;
   width: 60%;
+  max-width: 450px;
   padding: 3%;
   margin-top: 2%;
   margin-left: auto;
@@ -151,7 +154,7 @@ body{
   margin-right: auto;
   width: 162px;
   margin-bottom: 10px;
-  margin-top: 10%;
+  margin-top: 8%;
 }
 
 .signButton{
@@ -161,6 +164,7 @@ body{
   padding: 5px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 30px;
   font-family: 'gothamcondensed_bookregular';
   text-transform: uppercase;
   font-size: 36px;
@@ -209,4 +213,10 @@ body{
 
 #p3{
   display: none;
+}
+
+/* QUERIES */
+@media all and (min-width: 769px){
+  .owl-carousel img{max-height:65%;}
+  .button{font-size:44px;padding:10px;margin-top:30px;}
 }

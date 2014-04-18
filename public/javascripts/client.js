@@ -154,7 +154,8 @@ var Client = function (options){
         // itemsMobile: [479,1],
         navigationText : ["vorige","volgende"],
         autoplay: 1500,
-        stopOnHover: true
+        stopOnHover: true,
+        lazyLoad: true
 
     });
 
@@ -292,7 +293,7 @@ var Client = function (options){
 
   var resizeCarousel = function(){
     var max = Math.max($(window).height(),$(window).width());
-    $("#owl-results img").css("width", 640);
+    $("#owl-results img").css("width", parseInt($(window).height()*0.65));
     // $("#owl-results img")
     // $("#owl-results img").css("height", 640);
     log("resize to "+max+"x"+max);

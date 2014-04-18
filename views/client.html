@@ -32,11 +32,14 @@
   <div id="p1" class="container">
     <div id="owl-results-container" class="my-owl-container">
       <div id="owl-results" class="owl-carousel ">
-        <div class="item fullItem"><img src="images/results/0001.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/0002.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/0003.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/0004.png" alt=""></div>
-        <div class="item fullItem"><img src="images/results/0005.png" alt=""></div>
+        <% for(var i=0; i<resultaten.length; i++) {%>
+        <div class="item fullItem"><img class="lazyOwl" data-src="images/results/<%= resultaten[i] %>" alt=""></div>
+        <% } %>
+<!--         <div class="item fullItem"><img class="lazyOwl" data-src="images/results/0001.png" alt=""></div>
+        <div class="item fullItem"><img class="lazyOwl" data-src="images/results/0002.png" alt=""></div>
+        <div class="item fullItem"><img class="lazyOwl" data-src="images/results/0003.png" alt=""></div>
+        <div class="item fullItem"><img class="lazyOwl" data-src="images/results/0004.png" alt=""></div>
+        <div class="item fullItem"><img class="lazyOwl" data-src="images/results/0005.png" alt=""></div> -->
       </div>
     </div>
     <div id="wemeButton" class="button">

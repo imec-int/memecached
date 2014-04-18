@@ -22,11 +22,26 @@ var settings = {
 		secret: null
 	},
 	selectedfolder: null,
-	images: {}
+	images: {},
+	results: []
 }
 
 function getSelectedFolder () {
 	return (settings.selectedfolder)?settings.selectedfolder + " ("+settings.dropboxuser.displayName+"'s Dropbox)": 'none';
+}
+
+function updateResults(){
+	// REMOVES FIRST ELEMENT (.gitignore) !!!!!
+	var files = fs.readdirSync(config.resultsfolder);
+	files.shift();
+	// var trimmed = [files.length];
+	for(var i in files) {
+		console.log(files[i]);
+		// if(files[i] != ".gitignore" && files[i] != ".DS_Store")
+		// 	trimmed.push(files[i])
+	}
+	results = files;
+	return files;
 }
 
 var app = express();
@@ -59,6 +74,8 @@ var webserver = http.createServer(app).listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
 });
 
+
+updateResults();
 
 // Passport (Dropbox):
 
@@ -141,9 +158,11 @@ app.get('/', function (req, res){
 	serverAddress = req.protocol + "://" + req.get('host');
 	initPassport();
 	if(req.isAuthenticated()){
-		if(isAuthorized(req.user))
-			res.render('client.html', {iMindsConnected: true});
-		else {
+		if(isAuthorized(req.user)){
+			if(!results)
+				results = updateResults();
+			res.render('client.html', {iMindsConnected: true, resultaten: results});
+		}else {
 			req.logOut();
 			res.redirect('/');
 		}

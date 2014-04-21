@@ -174,10 +174,10 @@ app.get('/', function (req, res){
 	initPassport();
 	if(req.isAuthenticated()){
 		if(isAuthorized(req.user)){
-			if(!results)
-				results = updateResults();
-			if(!sourcePhotos)
-				sourcePhotos = updateSourcePhotos();
+			results = updateResults();
+			results.reverse();
+			sourcePhotos = updateSourcePhotos();
+			sourcePhotos.reverse();
 			res.render('client.html', {iMindsConnected: true, resultaten: results, fotos:sourcePhotos});
 		}else {
 			req.logOut();

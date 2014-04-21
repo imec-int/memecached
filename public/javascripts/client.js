@@ -89,35 +89,33 @@ var Client = function (options){
     $("#wemeButton").click(function(){
       $("#p1").css("display","none");
       $("#p2").css("display","block");
+      $("#p4").css("display","none");
     });
     $("#selectButton").click(function(){
       initCanvas();
       $("#p1").css("display","none");
       $("#p2").css("display","none");
       $("#p3").css("display","block");
+      $("#p4").css("display","none");
       $("#memeTextTop").focus();
     });
     $("#doneButton").click(function(){
-      var data  = document.getElementById("memeCanvas").toDataURL("image/png");
-      data = data.replace('data:' + "image/png" + ';base64,', '');
+      $("#doneButton").off();
+      $("#doneButton").hide();
+      var dataUrl  = document.getElementById("memeCanvas").toDataURL("image/png");
+      var data = dataUrl.replace('data:' + "image/png" + ';base64,', '');
 
       var jqxhr = $.post("/upload", {"image":data,"name":chosenPhotoId}, function() {
   				log("success");
+          $("#p1").css("display","none");
+          $("#p2").css("display","none");
+          $("#p3").css("display","none");
+          $("#p4").css("display","block");
+          $("#imgResult").attr("src",dataUrl);
 			})
-
-      // var xhr = new XMLHttpRequest();
-      // xhr.open('POST', "/xhrupload");
-      // // xhr.setRequestHeader("Cache-Control", "no-cache");
-  		// // xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-  		// // xhr.setRequestHeader("Content-Type", "image/png");
-  		// // xhr.setRequestHeader("X-File-Name", chosenPhotoId+".png");
-      // xhr.onreadystatechange = function() {
-  		// 	if (xhr.readyState == 4) {
-  		// 		doneUploading( JSON.parse(xhr.responseText) );
-  		// 	}
-  		// }
-		  // xhr.send(data);
-      //document.write('<img src="'+img+'"/>');
+    });
+    $("#refreshButton").click(function(){
+      window.location.replace(window.location.href);
     });
     $("#typeIndicatorTop").click(function(){
         $("#memeTextTop").focus();
@@ -302,6 +300,7 @@ var Client = function (options){
     if(!isMobileLandscape()){
       $("#logo").height(windowHeight*0.12);
       $("#memeCanvas").height(windowHeight*0.6);
+      $("#imgResult").height(windowHeight*0.6);
       $(".memeText").css("left", $("#memeCanvas").css("margin-left"));
       $(".memeText").css("width", $("#memeCanvas").css("width"));
       $("#memeTextTop").css("top", 40+"px");

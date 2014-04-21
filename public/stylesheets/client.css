@@ -215,6 +215,11 @@ body{
   display: none;
 }
 
+#p4{
+  display: none;
+  text-align:center;
+}
+
 /* QUERIES */
 @media all and (min-width: 769px){
   .owl-carousel img{max-height:65%;}

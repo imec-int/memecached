@@ -11,6 +11,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var Dropbox = require('./dropbox');
 var config = require('./config');
 var utils = require('./utils');
+var socketio = require('socket.io');
 
 var dropbox = new Dropbox({app_key:config.dropbox.app_key, app_secret: config.dropbox.app_secret});
 var serverAddress = 'http://localhost:3000';
@@ -88,6 +89,13 @@ var webserver = http.createServer(app).listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
 });
 
+// Socket IO
+var io = socketio.listen(webserver);
+io.set('log level', 0);
+
+io.sockets.on('connection', function (socket) {
+	console.log("connection with VIZ");
+});
 
 updateResults();
 updateSourcePhotos();
@@ -222,6 +230,12 @@ app.get('/admin', function (req, res){
 
 });
 
+app.get('/viz', function(req, res){
+	results = updateResults();
+	results.reverse();
+	res.render('viz.html', {results: results});
+});
+
 app.get('/logout', function(req, res){
 	req.logOut();
 	res.redirect('/');
@@ -236,6 +250,9 @@ app.post('/upload', function (req, res){
 	name = (Date.now()) + '_' + name + '.png';
 	var uploadedFile = path.join(config.resultsfolder, name);
 	fs.writeFile(uploadedFile, buf);
+
+	// notify Viz page
+	io.sockets.emit( 'new', name );
 
 	res.send(200);
 });
@@ -258,71 +275,71 @@ db.open(function(err) {
 	}
 });
 
-// now.js code
-var everyone = require("now").initialize(webserver);
+// // now.js code
+// var everyone = require("now").initialize(webserver);
 
-// send by the client on init:
-everyone.now.init = function(callback) {
-	everyone.now.populateMemePicker(settings.images);
-};
+// // send by the client on init:
+// everyone.now.init = function(callback) {
+// 	everyone.now.populateMemePicker(settings.images);
+// };
 
-// publish meme
-everyone.now.publish = function(meme) {
-	if(meme.name && (meme.text.line1 || meme.text.line2) ) {
-		db.collection('memes', function(err, collection) {
-			// add a date field and save
-			meme.date = Date.now();
-			collection.insert(meme, function(err) {
-				if(!err)
-					everyone.now.receiveMeme(meme);
-			});
-		});
-	}
-};
+// // publish meme
+// everyone.now.publish = function(meme) {
+// 	if(meme.name && (meme.text.line1 || meme.text.line2) ) {
+// 		db.collection('memes', function(err, collection) {
+// 			// add a date field and save
+// 			meme.date = Date.now();
+// 			collection.insert(meme, function(err) {
+// 				if(!err)
+// 					everyone.now.receiveMeme(meme);
+// 			});
+// 		});
+// 	}
+// };
 
-// retrieve the latest few memes of a name. If there is no name, retrieve a mixture
-everyone.now.getRecent = function(memeName) {
-	var client = this;
-	console.log("retrieving");
-	db.collection('memes', function(err, collection) {
-		if(memeName == undefined) {
-			collection.find( {}, { sort: [[ "date", "desc" ]], limit: 25 }).toArray( function(err, docs) {
-				client.now.getContent(docs);
-			});
-		}
-		else {
-			collection.find( {"name": memeName}, { sort: [[ "date", "desc" ]], limit: 25 }).toArray( function(err, docs) {
-				client.now.getContent(docs);
-			});
-		}
-	});
-};
+// // retrieve the latest few memes of a name. If there is no name, retrieve a mixture
+// everyone.now.getRecent = function(memeName) {
+// 	var client = this;
+// 	console.log("retrieving");
+// 	db.collection('memes', function(err, collection) {
+// 		if(memeName == undefined) {
+// 			collection.find( {}, { sort: [[ "date", "desc" ]], limit: 25 }).toArray( function(err, docs) {
+// 				client.now.getContent(docs);
+// 			});
+// 		}
+// 		else {
+// 			collection.find( {"name": memeName}, { sort: [[ "date", "desc" ]], limit: 25 }).toArray( function(err, docs) {
+// 				client.now.getContent(docs);
+// 			});
+// 		}
+// 	});
+// };
 
-everyone.now.setSelectedFolder = function(folder, callback) {
-	console.log(folder);
+// everyone.now.setSelectedFolder = function(folder, callback) {
+// 	console.log(folder);
 
-	settings.selectedfolder = folder;
+// 	settings.selectedfolder = folder;
 
-	callback(null, getSelectedFolder());
+// 	callback(null, getSelectedFolder());
 
 
-	// also get the images from that folder:
-	// it's slow, so do it here
+// 	// also get the images from that folder:
+// 	// it's slow, so do it here
 
-	// FOR NOW: HARDCODE THE PATH; listing all subdirs of every folder is slow!!
-	// only listing the subdirs when a folder is selected requires too much effort
-	folder = "/DWW Strategy/Foto's/GESELECTEERDE FOTO'S/optimized";
-	dropbox.downloadImages(settings.dropboxuser, folder, config.photosfolder, function (err, localimages) {
-		if(err) return console.log(err);
+// 	// FOR NOW: HARDCODE THE PATH; listing all subdirs of every folder is slow!!
+// 	// only listing the subdirs when a folder is selected requires too much effort
+// 	folder = "/DWW Strategy/Foto's/GESELECTEERDE FOTO'S/optimized";
+// 	dropbox.downloadImages(settings.dropboxuser, folder, config.photosfolder, function (err, localimages) {
+// 		if(err) return console.log(err);
 
-		settings.images = {};
+// 		settings.images = {};
 
-		for (var i = 0; i < localimages.length; i++) {
-			var file = utils.wwwdfy(localimages[i]);
-			var name = utils.basenameWithoutExtension(file);
-			settings.images[file] = name;
-		};
+// 		for (var i = 0; i < localimages.length; i++) {
+// 			var file = utils.wwwdfy(localimages[i]);
+// 			var name = utils.basenameWithoutExtension(file);
+// 			settings.images[file] = name;
+// 		};
 
-		everyone.now.populateMemePicker(settings.images);
-	});
-};
+// 		everyone.now.populateMemePicker(settings.images);
+// 	});
+// };

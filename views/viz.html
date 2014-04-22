@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <title>WeMe</title>
+  <meta charset="utf-8">
+  <meta name = "viewport" content = "user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link href="stylesheets/client.css" rel="stylesheet">
+  <link href="vendor/slideshow/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="font/stylesheet.css" type="text/css" charset="utf-8" />
+  <script src="/socket.io/socket.io.js"></script>
+
+
+</head>
+<body>
+  <div id="logo">
+    &#160;
+  </div>
+  <div class="main">
+    <div id="slideshow"  class="rs-slideshow">
+      <div id="" class="slide-container">
+        <% if(results.length > 0) {%>
+          <img src="images/results/<%= results[0] %>" alt="" title="" />
+        <% } %>
+      </div>
+      <ol class="slides">
+        <% for(var i=1; i<results.length; i++) {%>
+          <li>
+            <a href="images/results/<%= results[i] %>"
+              title=""></a>
+          </li>
+        <% } %>
+      </ol>
+    </div>
+  </div>
+  <script src="vendor/fastclick.js"></script>
+  <script src="vendor/jquery-1.11.0.min.js"></script>
+  <script src="vendor/slideshow/js/jquery.rs.slideshow.js"></script>
+  <script src="javascripts/viz.js"></script>
+
+</body>
+</html>

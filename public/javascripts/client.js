@@ -284,9 +284,9 @@ var Client = function (options){
 
       var y;
       if(pos == "top")
-          y = fontSize + 65;
+          y = fontSize + 35;
       else if(pos == "bottom") {
-          y = parseInt($("#memeCanvas").attr("height")) - 90;
+          y = parseInt($("#memeCanvas").attr("height")) - 40;
       }
       ctx.strokeText(text, width/2, y);
       ctx.fillText(text, width/2, y);

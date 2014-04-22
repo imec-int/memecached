@@ -8,8 +8,6 @@
     "express": "3.0.3",
     "jade": "*",
     "stylus": "~0.40.3",
-    "now": "~0.8.1",
-    "mongodb": "~1.4.0",
     "oauth": "git://github.com/SamDecrock/node-oauth",
     "passport-dropbox": "~0.1.2",
     "passport": "~0.2.0",

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var fs  =require('fs');
-var mongo = require('mongodb');
 var express = require('express');
 var http = require('http')
 var path = require('path');
@@ -264,82 +263,3 @@ function isAuthorized(user){
 	else return false;
 }
 
-
-
-var db = new mongo.Db('memedb', new mongo.Server("127.0.0.1", 27017));
-db.open(function(err) {
-	if(err) {
-		console.log(err);
-		db.close();
-		process.exit(1);
-	}
-});
-
-// // now.js code
-// var everyone = require("now").initialize(webserver);
-
-// // send by the client on init:
-// everyone.now.init = function(callback) {
-// 	everyone.now.populateMemePicker(settings.images);
-// };
-
-// // publish meme
-// everyone.now.publish = function(meme) {
-// 	if(meme.name && (meme.text.line1 || meme.text.line2) ) {
-// 		db.collection('memes', function(err, collection) {
-// 			// add a date field and save
-// 			meme.date = Date.now();
-// 			collection.insert(meme, function(err) {
-// 				if(!err)
-// 					everyone.now.receiveMeme(meme);
-// 			});
-// 		});
-// 	}
-// };
-
-// // retrieve the latest few memes of a name. If there is no name, retrieve a mixture
-// everyone.now.getRecent = function(memeName) {
-// 	var client = this;
-// 	console.log("retrieving");
-// 	db.collection('memes', function(err, collection) {
-// 		if(memeName == undefined) {
-// 			collection.find( {}, { sort: [[ "date", "desc" ]], limit: 25 }).toArray( function(err, docs) {
-// 				client.now.getContent(docs);
-// 			});
-// 		}
-// 		else {
-// 			collection.find( {"name": memeName}, { sort: [[ "date", "desc" ]], limit: 25 }).toArray( function(err, docs) {
-// 				client.now.getContent(docs);
-// 			});
-// 		}
-// 	});
-// };
-
-// everyone.now.setSelectedFolder = function(folder, callback) {
-// 	console.log(folder);
-
-// 	settings.selectedfolder = folder;
-
-// 	callback(null, getSelectedFolder());
-
-
-// 	// also get the images from that folder:
-// 	// it's slow, so do it here
-
-// 	// FOR NOW: HARDCODE THE PATH; listing all subdirs of every folder is slow!!
-// 	// only listing the subdirs when a folder is selected requires too much effort
-// 	folder = "/DWW Strategy/Foto's/GESELECTEERDE FOTO'S/optimized";
-// 	dropbox.downloadImages(settings.dropboxuser, folder, config.photosfolder, function (err, localimages) {
-// 		if(err) return console.log(err);
-
-// 		settings.images = {};
-
-// 		for (var i = 0; i < localimages.length; i++) {
-// 			var file = utils.wwwdfy(localimages[i]);
-// 			var name = utils.basenameWithoutExtension(file);
-// 			settings.images[file] = name;
-// 		};
-
-// 		everyone.now.populateMemePicker(settings.images);
-// 	});
-// };

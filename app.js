@@ -258,8 +258,12 @@ app.post('/upload', function (req, res){
 
 function isAuthorized(user){
 	// enkel iminds.be toelaten
-	if(user.email && user.email.split('@')[1] == 'iminds.be')
-		return true;
+	if(user.email) {
+		var domain = user.email.split('@')[1];
+		if(domain == 'iminds.be' || domain == 'viaa.be')
+			return true;
+		else return false;
+	}
 	else return false;
 }
 

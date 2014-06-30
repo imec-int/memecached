@@ -1,12 +1,15 @@
 Memecached
 ==========
 
+## Glass branch
+uses `ngrok` to create an https callbackurl (alternative: use google's proxy in combination with  a public application server)
+
 ## Real Dropbox folder
 Go to ```/admin``` to select a real Dropbox folder
 
-Love **memes**? 
+Love **memes**?
 
-Want to generate memes and share them with everyone in **real-time**? 
+Want to generate memes and share them with everyone in **real-time**?
 
 Use **Memecached**.
 

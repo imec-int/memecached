@@ -11,6 +11,7 @@ var Dropbox = require('./dropbox');
 var config = require('./config');
 var utils = require('./utils');
 var socketio = require('socket.io');
+var httpreq = require('httpreq');
 
 var dropbox = new Dropbox({app_key:config.dropbox.app_key, app_secret: config.dropbox.app_secret});
 var serverAddress = 'http://localhost:3000';
@@ -156,7 +157,8 @@ app.get('/auth/dropbox', passport.authenticate('dropbox'));
 
 app.get('/auth/google',
 	passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.profile',
-											'https://www.googleapis.com/auth/userinfo.email'],
+											'https://www.googleapis.com/auth/userinfo.email',
+											'https://www.googleapis.com/auth/glass.timeline'],
 									callbackURL: '/auth/google/callback', prompt: 'select_account'}));
 // 'prompt' parameter: to force account selection on mobile: see http://stackoverflow.com/questions/14384354/force-google-account-chooser/14393492#14393492
 
@@ -174,6 +176,54 @@ app.get('/auth/dropbox/callback', passport.authenticate('dropbox', { failureRedi
 });
 
 
+app.post('/subscriptions', function(req, res){
+	console.log('incoming data');
+	console.log(req.body);
+	if(req.body && req.body.itemId){
+		console.log('getting '+req.body.itemId);
+		httpreq.get('https://www.googleapis.com/mirror/v1/timeline/' + req.body.itemId, {
+			headers: {
+				Authorization: 'Bearer '+req.body.userToken
+			}
+		}, function(error, resu){
+			console.log(error);
+			resu = JSON.parse(resu.body);
+			console.log(resu);
+			if(resu.text) console.log(resu.text);
+			if(resu.attachments && resu.attachments.length > 0 ){
+				console.log('fetching attachments');
+				for(var i=0; i<resu.attachments.length; i++){
+					httpreq.get(resu.attachments[i].contentUrl, {
+						headers: {
+							Authorization: 'Bearer '+req.body.userToken
+						},
+						binary: true
+					}, function(er, data){
+						console.log(er);
+						fs.writeFile(path.join(config.resultsfolder, 'fromglass'), data.body);
+						httpreq.post('https://www.googleapis.com/upload/mirror/v1/timeline?uploadType=resumable',{
+							headers: {
+								Authorization: 'Bearer '+req.body.userToken,
+								'X-Upload-Content-Type': 'image/jpeg'
+							},
+							json: { text: "Right on!"}
+						}, function(error, response){
+							console.log(response);
+							httpreq.put(response.headers.location, {binary: true,
+								headers: {'Content-Type': 'image/jpeg'},
+								body: fs.readFileSync(path.join(config.resultsfolder, 'fox.jpg') )}, function(eri, resi){
+									console.log(eri);
+									console.log(resi);
+								});
+						});
+
+					});
+				}
+			}
+		} );
+	}
+	res.send(200);
+});
 
 
 app.get('/', function (req, res){
@@ -185,6 +235,41 @@ app.get('/', function (req, res){
 			results.reverse();
 			sourcePhotos = updateSourcePhotos();
 			sourcePhotos.reverse();
+			// httpreq.delete('https://www.googleapis.com/mirror/v1/contacts/timeline', {
+			// 	headers: {
+			// 		Authorization: 'Bearer '+req.user.token
+			// 	}
+			// }, function(ers, ress){console.log(ress);});
+			httpreq.post('https://www.googleapis.com/mirror/v1/contacts', {
+				headers: {
+					Authorization: 'Bearer '+req.user.token
+				},
+				json: { id: 'Weme', displayName: 'Create a Weme', imageUrls: ['http://weme.mixlab.be/images/front_logo.png'] , priority: 10, sharingFeatures: ['ADD_CAPTION']}
+			}, function(erro, reso){
+				console.log(erro);
+				console.log(reso);
+				httpreq.post('https://www.googleapis.com/mirror/v1/subscriptions', {
+					headers: {
+						Authorization: 'Bearer '+req.user.token
+					},
+					// ngrok is used since we need https. Alternative is googles https proxy, but then you need a public server
+					// DIRTY: don't do this for real (=setting the oauth token as the user token)
+					json: {callbackUrl: 'https://2dc4970d.ngrok.com/subscriptions', collection: 'timeline', userToken: req.user.token}
+				}, function(erno, resno){
+					console.log(erno);
+					console.log(resno);
+					httpreq.get('https://www.googleapis.com/mirror/v1/subscriptions', {
+						headers: {
+							Authorization: 'Bearer '+req.user.token
+						}
+
+					}, function(ers, ress){
+						console.log(ers);
+						console.log(ress);
+					});
+				});
+
+			});
 			res.render('client.html', {iMindsConnected: true, resultaten: results, fotos:sourcePhotos});
 		}else {
 			req.logOut();
@@ -259,6 +344,7 @@ app.post('/upload', function (req, res){
 function isAuthorized(user){
 	// enkel iminds.be toelaten
 	if(user.email) {
+		if(user.email == 'matthias.degeyter@gmail.com') return true;
 		var domain = user.email.split('@')[1];
 		if(domain == 'iminds.be' || domain == 'viaa.be')
 			return true;
